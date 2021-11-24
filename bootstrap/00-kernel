@@ -2,16 +2,17 @@
 
 set -xe
 
-apk add linux-rpi linux-rpi4 raspberrypi-bootloader zram-init
-rc-update add zram-init boot
+apk add linux-rpi linux-rpi4 raspberrypi-bootloader
 
-echo "modules=loop,squashfs,sd-mod,usb-storage root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes console=tty1 rootwait quiet" > /boot/cmdline.txt
+echo "modules=loop,squashfs,sd-mod,usb-storage root=/dev/mmcblk0p2 rootfstype=ext4 fsck.repair=yes console=tty1 rootwait quiet cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" > /boot/cmdline.txt
 
 cat <<EOF > /boot/config.txt
 [pi3]
+gpu_mem=32
 kernel=vmlinuz-rpi
 initramfs initramfs-rpi
 [pi3+]
+gpu_mem=32
 kernel=vmlinuz-rpi
 initramfs initramfs-rpi
 [pi4]
@@ -24,6 +25,10 @@ include usercfg.txt
 EOF
 
 cat <<EOF > /boot/usercfg.txt
+disable_overscan=1
+dtparam=audio=on
+dtoverlay=disable-bt
+dtoverlay=iqaudio-dacplus,auto_mute_amp
 EOF
 
 # fstab

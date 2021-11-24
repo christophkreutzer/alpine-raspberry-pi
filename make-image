@@ -44,7 +44,7 @@ BOOT_PARTUUID="${IMGID}-01"
 ROOT_PARTUUID="${IMGID}-02"
 
 apt-get update
-curl https://raw.githubusercontent.com/alpinelinux/alpine-chroot-install/master/alpine-chroot-install | sh
+curl https://raw.githubusercontent.com/alpinelinux/alpine-chroot-install/v0.13.1/alpine-chroot-install | sh
 
 cp -R bootstrap/ /alpine/
 /alpine/enter-chroot run-parts /bootstrap/
