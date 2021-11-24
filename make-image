@@ -5,6 +5,7 @@ set -xe
 mkdir -p dist /dist
 
 OUTPUT_IMG="/dist/target.img"
+ALPINE_CHROOT_INSTALL_VERSION=master
 
 rm -Rf "$OUTPUT_IMG"
 truncate -s 2G "$OUTPUT_IMG"
@@ -44,7 +45,7 @@ BOOT_PARTUUID="${IMGID}-01"
 ROOT_PARTUUID="${IMGID}-02"
 
 apt-get update
-curl https://raw.githubusercontent.com/alpinelinux/alpine-chroot-install/v0.13.1/alpine-chroot-install | sh
+curl "https://raw.githubusercontent.com/alpinelinux/alpine-chroot-install/${ALPINE_CHROOT_INSTALL_VERSION}/alpine-chroot-install" | sh
 
 cp -R bootstrap/ /alpine/
 /alpine/enter-chroot run-parts /bootstrap/
