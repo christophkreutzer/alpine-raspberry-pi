@@ -2,7 +2,7 @@
 
 set -xe
 
-apk add wpa_supplicant wireless-tools wireless-regdb iw
+apk add wpa_supplicant wireless-tools wireless-regdb iw dbus
 sed -i 's/wpa_supplicant_args=\"/wpa_supplicant_args=\" -u -Dwext,nl80211/' /etc/conf.d/wpa_supplicant
 
 echo -e 'brcmfmac' >> /etc/modules
@@ -30,9 +30,3 @@ iface wlan0 inet dhcp
 hostname raspberrypi  
 EOF
 
-# avahi
-apk add dbus avahi
-
-# bluetooth
-apk add bluez bluez-deprecated
-sed -i '/bcm43xx/s/^#//' /etc/mdev.conf

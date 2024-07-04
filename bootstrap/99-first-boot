@@ -8,7 +8,7 @@ cat <<EOF > /usr/bin/first-boot
 #!/bin/sh
 set -xe
 
-cat <<PARTED | sudo parted ---pretend-input-tty /dev/mmcblk0
+cat <<PARTED | parted ---pretend-input-tty /dev/mmcblk0
 unit %
 resizepart 2
 Yes
@@ -35,3 +35,30 @@ EOF
 
 chmod +x /etc/init.d/first-boot /usr/bin/first-boot
 rc-update add first-boot
+
+cat <<EOF > /usr/bin/second-boot
+#!/bin/sh
+set -xe
+
+if [ -f /boot/second-boot.sh ]; then
+  /bin/sh /boot/second-boot.sh
+fi
+
+rc-update del second-boot
+rm /etc/init.d/second-boot /usr/bin/second-boot
+
+reboot
+EOF
+
+cat <<EOF > /etc/init.d/second-boot
+#!/sbin/openrc-run
+command="/usr/bin/second-boot"
+command_background=false
+depend() {
+  after local
+  need localmount net
+}
+EOF
+
+chmod +x /etc/init.d/second-boot /usr/bin/second-boot
+rc-update add second-boot default
